@@ -545,7 +545,7 @@ void AlcEnabler::processKext(KernelPatcher &patcher, size_t index, mach_vm_addre
 		}
 		
 		// 10.6.8 to 10.7.5, and early versions of 10.8 do not use zlib compression for resources
-		isAppleHDAZlib = patcher.solveSymbol(index, "__Z24AppleHDA_zlib_uncompressPhPmPKhm") != 0;
+		isAppleHDAZlib = getKernelVersion() >= KernelVersion::Mavericks || patcher.solveSymbol(index, "__Z24AppleHDA_zlib_uncompressPhPmPKhm") != 0;
 		if (!isAppleHDAZlib)
 			patcher.clearError();
 
