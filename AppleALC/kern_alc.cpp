@@ -978,7 +978,16 @@ void AlcEnabler::replaceAppleHDAPlatformDriverResources(IOService *service) {
 	DBGLOG("alc", "replacing AppleHDAPlatformDriver resources");
 	
 	auto pathMapsDriverArray = OSArray::withCapacity((uint32_t) codecs.size());
+	if (pathMapsDriverArray == nullptr) {
+		SYSLOG("alc", "failed to create pathmaps dictionary");
+		return;
+	}
 	auto layoutsDriverArray = OSArray::withCapacity((uint32_t) codecs.size());
+	if (layoutsDriverArray == nullptr) {
+		SYSLOG("alc", "failed to create layouts dictionary");
+		pathMapsDriverArray->release();
+		return;
+	}
 
 	for (size_t i = 0, s = codecs.size(); i < s; i++) {
 		DBGLOG("alc", "adding codec %X:%X:%X", codecs[i]->vendor, codecs[i]->codec, codecs[i]->revision);
@@ -1036,7 +1045,13 @@ void AlcEnabler::replaceAppleHDAPlatformDriverResources(IOService *service) {
 
 				// Replace layout ID if a different layout ID is being reported to the OS.
 				if (layoutIdIsOverridden) {
-					dict->setObject("LayoutID", OSNumber::withNumber(layoutIdOverride, 32));
+					auto layoutNum = OSNumber::withNumber(layoutIdOverride, 32);
+					if (layoutNum) {
+						dict->setObject("LayoutID", layoutNum);
+						layoutNum->release();
+					} else {
+						SYSLOG("alc", "failed to set LayoutID");
+					}
 				}
 
 				layoutsDriverArray->setObject(dict);
@@ -1049,6 +1064,9 @@ void AlcEnabler::replaceAppleHDAPlatformDriverResources(IOService *service) {
 	// Replace existing layouts and pathmaps.
 	service->setProperty("Layouts", layoutsDriverArray);
 	service->setProperty("PathMaps", pathMapsDriverArray);
+	
+	layoutsDriverArray->release();
+	pathMapsDriverArray->release();
 }
 
 OSDictionary* AlcEnabler::unserializeCodecDictionary(const uint8_t *data, uint32_t dataLength) {
@@ -1065,6 +1083,9 @@ OSDictionary* AlcEnabler::unserializeCodecDictionary(const uint8_t *data, uint32
 		auto parsedXML = OSUnserializeXML((char*) buffer, &errorString);
 		if (parsedXML) {
 			parsedDict = OSDynamicCast(OSDictionary, parsedXML);
+			if (!parsedDict) {
+				parsedXML->release();
+			}
 		}
 		
 		if (!parsedDict) {
