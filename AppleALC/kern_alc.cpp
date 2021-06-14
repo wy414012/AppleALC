@@ -8,9 +8,11 @@
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_devinfo.hpp>
 #include <Headers/plugin_start.hpp>
+#include <Headers/kern_compression.hpp>
 #include <IOKit/IOService.h>
 #include <IOKit/pci/IOPCIDevice.h>
 #include <mach/vm_map.h>
+#include <libkern/c++/OSUnserialize.h>
 
 #include "kern_alc.hpp"
 #include "kern_resources.hpp"
@@ -313,8 +315,13 @@ void AlcEnabler::updateDeviceProperties(IORegistryEntry *hdaService, DeviceInfo 
 #endif
 
 	// For every client only set layout-id itself.
-	if (info->firmwareVendor != DeviceInfo::FirmwareVendor::Apple || hdaService->getProperty("use-apple-layout-id") != nullptr)
+	if (info->firmwareVendor != DeviceInfo::FirmwareVendor::Apple || hdaService->getProperty("use-apple-layout-id") != nullptr) {
 		hdaService->setProperty("layout-id", &info->reportedLayoutId, sizeof(info->reportedLayoutId));
+#ifdef HAVE_ANALOG_AUDIO
+		layoutIdIsOverridden = true;
+		layoutIdOverride = info->reportedLayoutId;
+#endif
+	}
 
 	// Pass onboard-X if requested.
 	if (hdaGfx)
@@ -515,14 +522,25 @@ void AlcEnabler::processKext(KernelPatcher &patcher, size_t index, mach_vm_addre
 	}
 	
 	if ((progressState & ProcessingState::CallbacksWantRouting) && kextIndex == KextIdAppleHDA) {
+		// functions that exist in all versions
 		KernelPatcher::RouteRequest requests[] {
-			KernelPatcher::RouteRequest("__ZN14AppleHDADriver18layoutLoadCallbackEjiPKvjPv", layoutLoadCallback, orgLayoutLoadCallback),
-			KernelPatcher::RouteRequest("__ZN14AppleHDADriver20platformLoadCallbackEjiPKvjPv", platformLoadCallback, orgPlatformLoadCallback),
 			KernelPatcher::RouteRequest("__ZN14AppleHDADriver23performPowerStateChangeE24_IOAudioDevicePowerStateS0_Pj", performPowerChange, orgPerformPowerChange),
-			KernelPatcher::RouteRequest("__ZN20AppleHDACodecGeneric38initializePinConfigDefaultFromOverrideEP9IOService", initializePinConfig, orgInitializePinConfig),
+			KernelPatcher::RouteRequest("__ZN20AppleHDACodecGeneric38initializePinConfigDefaultFromOverrideEP9IOService", initializePinConfig, orgInitializePinConfig)
 		};
-
 		patcher.routeMultiple(index, requests, address, size);
+		
+		
+		// layout and platform load callbacks only exist in 10.6.8 and later
+		if (patcher.solveSymbol(index, "__ZN14AppleHDADriver18layoutLoadCallbackEjiPKvjPv")) {
+			KernelPatcher::RouteRequest requestsCallbacks[] {
+				KernelPatcher::RouteRequest("__ZN14AppleHDADriver18layoutLoadCallbackEjiPKvjPv", layoutLoadCallback, orgLayoutLoadCallback),
+				KernelPatcher::RouteRequest("__ZN14AppleHDADriver20platformLoadCallbackEjiPKvjPv", platformLoadCallback, orgPlatformLoadCallback)
+			};
+			patcher.routeMultiple(index, requestsCallbacks, address, size);
+		}
+		
+		// 10.6.8 to 10.7.5, and early versions of 10.8 do not use zlib compression for resources
+		isAppleHDAZlib = patcher.solveSymbol(index, "__Z24AppleHDA_zlib_uncompressPhPmPKhm") != 0;
 
 		// patch AppleHDA to remove redundant logs
 		if (!ADDPR(debugEnabled))
@@ -542,6 +560,15 @@ void AlcEnabler::processKext(KernelPatcher &patcher, size_t index, mach_vm_addre
 		patcher.routeMultiple(index, &request, 1, address, size);
 	}
 	
+#ifdef HAVE_ANALOG_AUDIO
+	// Layout/platform info is in AppleHDAPlatformDriver on versions prior to 10.6.8
+	if (!(progressState & ProcessingState::PatchHDAPlatformDriver) && kextIndex == KextIdAppleHDAPlatformDriver) {
+		progressState |= ProcessingState::PatchHDAPlatformDriver;
+		KernelPatcher::RouteRequest request("__ZN22AppleHDAPlatformDriver5startEP9IOService", AppleHDAPlatformDriver_start, orgAppleHDAPlatformDriver_start);
+		patcher.routeMultiple(index, &request, 1, address, size);
+	}
+#endif
+
 	// Ignore all the errors for other processors
 	patcher.clearError();
 }
@@ -801,9 +828,23 @@ void AlcEnabler::updateResource(Resource type, kern_return_t &result, const void
 				auto &fi = (type == Resource::Platform ? info->platforms : info->layouts)[f];
 				DBGLOG("alc", "comparing %lu layout %X/%X", f, fi.layout, controllers[codecs[i]->controller]->layout);
 				if (controllers[codecs[i]->controller]->layout == fi.layout && KernelPatcher::compatibleKernel(fi.minKernel, fi.maxKernel)) {
-					DBGLOG("alc", "found %s at %lu index", type == Resource::Platform ? "platform" : "layout", f);
-					resourceData = fi.data;
-					resourceDataLength = fi.dataLength;
+					DBGLOG("alc", "found %s at %lu index, zlib %u", type == Resource::Platform ? "platform" : "layout", f, isAppleHDAZlib);
+					
+					// decompress resource for non-zlib systems
+					if (!isAppleHDAZlib) {
+						uint32_t bufferLength = 0x7A000; // Buffer size that AppleHDA uses.
+						auto buffer = Compression::decompress(Compression::ModeZLIB, &bufferLength, fi.data, fi.dataLength, nullptr);
+						if (!buffer) {
+							break;
+						}
+						
+						resourceData = buffer;
+						resourceDataLength = bufferLength;
+
+					} else {
+						resourceData = fi.data;
+						resourceDataLength = fi.dataLength;
+					}
 					result = kOSReturnSuccess;
 					break;
 				}
@@ -925,6 +966,121 @@ bool AlcEnabler::validateCodecs() {
 	}
 
 	return codecs.size() > 0;
+}
+
+bool AlcEnabler::AppleHDAPlatformDriver_start(IOService* service, IOService* provider) {
+	callbackAlc->replaceAppleHDAPlatformDriverResources(service);
+	
+	return FunctionCast(AppleHDAPlatformDriver_start, callbackAlc->orgAppleHDAPlatformDriver_start)(service, provider);
+}
+
+void AlcEnabler::replaceAppleHDAPlatformDriverResources(IOService *service) {
+	DBGLOG("alc", "replacing AppleHDAPlatformDriver resources");
+	
+	auto pathMapsDriverArray = OSArray::withCapacity((uint32_t) codecs.size());
+	auto layoutsDriverArray = OSArray::withCapacity((uint32_t) codecs.size());
+
+	for (size_t i = 0, s = codecs.size(); i < s; i++) {
+		DBGLOG("alc", "adding codec %X:%X:%X", codecs[i]->vendor, codecs[i]->codec, codecs[i]->revision);
+
+		auto info = codecs[i]->info;
+		if (!info) {
+			SYSLOG("alc", "missing CodecModInfo for %lu codec at resource updating", i);
+			continue;
+		}
+		
+		size_t num = info->platformNum;
+		DBGLOG("alc", "selecting platform from %lu files", num);
+		for (size_t f = 0; f < num; f++) {
+			auto &fi = info->platforms[f];
+			DBGLOG("alc", "comparing %lu layout %X/%X", f, fi.layout, controllers[codecs[i]->controller]->layout);
+			if (controllers[codecs[i]->controller]->layout == fi.layout && KernelPatcher::compatibleKernel(fi.minKernel, fi.maxKernel)) {
+				DBGLOG("alc", "found platform at %lu index", f);
+				
+				auto dict = unserializeCodecDictionary(fi.data, fi.dataLength);
+				if (!dict) {
+					SYSLOG("alc", "failed to extract layout data");
+					break;
+				}
+
+				auto pathMaps = dict->getObject("PathMaps");
+				if (pathMaps) {
+					auto pathMapsArray = OSDynamicCast(OSArray, pathMaps);
+					if (pathMapsArray) {
+						pathMapsDriverArray->merge(pathMapsArray);
+					} else {
+						SYSLOG("alc", "PathMaps element is not an array");
+					}
+				} else {
+					SYSLOG("alc", "failed to get PathMaps element");
+				}
+				
+				dict->release();
+				break;
+			}
+		}
+		
+		num = info->layoutNum;
+		DBGLOG("alc", "selecting layout from %lu files", num);
+		for (size_t f = 0; f < num; f++) {
+			auto &fi = info->layouts[f];
+			DBGLOG("alc", "comparing %lu layout %X/%X", f, fi.layout, controllers[codecs[i]->controller]->layout);
+			if (controllers[codecs[i]->controller]->layout == fi.layout && KernelPatcher::compatibleKernel(fi.minKernel, fi.maxKernel)) {
+				DBGLOG("alc", "found layout at %lu index", f);
+				
+				auto dict = unserializeCodecDictionary(fi.data, fi.dataLength);
+				if (!dict) {
+					SYSLOG("alc", "failed to extract platform data");
+					break;
+				}
+
+				// Replace layout ID if a different layout ID is being reported to the OS.
+				if (layoutIdIsOverridden) {
+					dict->setObject("LayoutID", OSNumber::withNumber(layoutIdOverride, 32));
+				}
+
+				layoutsDriverArray->setObject(dict);
+				dict->release();
+				break;
+			}
+		}
+	}
+	
+	// Replace existing layouts and pathmaps.
+	service->setProperty("Layouts", layoutsDriverArray);
+	service->setProperty("PathMaps", pathMapsDriverArray);
+}
+
+OSDictionary* AlcEnabler::unserializeCodecDictionary(const uint8_t *data, uint32_t dataLength) {
+	OSString *errorString = nullptr;
+	OSDictionary *parsedDict = nullptr;
+	uint32_t bufferLength = 0x7A000; // Buffer size that AppleHDA uses.
+	
+	auto buffer = Compression::decompress(Compression::ModeZLIB, &bufferLength, data, dataLength, nullptr);
+	if (!buffer) {
+		return nullptr;
+	}
+	
+	if (bufferLength != 0) {
+		auto parsedXML = OSUnserializeXML((char*) buffer, &errorString);
+		if (parsedXML) {
+			parsedDict = OSDynamicCast(OSDictionary, parsedXML);
+		}
+		
+		if (!parsedDict) {
+			const char *errorCString = "unknown error";
+			if (errorString && errorString->getCStringNoCopy()) {
+				errorCString = errorString->getCStringNoCopy();
+			}
+			
+			SYSLOG("alc", "failed to unserialize XML: %s", errorCString);
+		}
+	} else {
+		SYSLOG("alc", "failed to decompress zlib");
+	}
+	
+	Buffer::deleter(buffer);
+	return parsedDict;
 }
 #endif
 

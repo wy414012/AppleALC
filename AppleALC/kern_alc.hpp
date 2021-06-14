@@ -225,6 +225,43 @@ private:
 	 *  @param resourceDataLength resource data length reference
 	 */
 	void updateResource(Resource type, kern_return_t &result, const void * &resourceData, uint32_t &resourceDataLength);
+	
+	/**
+	 *  Hooked AppleHDAPlatformDriver start method
+	 */
+	static bool AppleHDAPlatformDriver_start(IOService* service, IOService* provider);
+	
+	/**
+	 *  AppleHDAPlatformDriver::start original method
+	 */
+	mach_vm_address_t orgAppleHDAPlatformDriver_start {0};
+	
+	/**
+	 *	Replace layout resources in AppleHDAPlatformDriver
+	 *
+	 *	@param service 			AppleHDAPlatformDriver instance
+	 */
+	void replaceAppleHDAPlatformDriverResources(IOService *service);
+	
+	/**
+	 *	Unserialize codec XML dictionary.
+	 *
+	 *	@param data				resource data
+	 *	@param dataLength	resource data length
+	 */
+	OSDictionary *unserializeCodecDictionary(const uint8_t *data, uint32_t dataLength);
+	
+	/**
+	 * Layout ID override
+	 */
+	bool layoutIdIsOverridden {false};
+	uint32_t layoutIdOverride {0};
+	
+	/**
+	 * AppleHDA uses zlib
+	 */
+	bool isAppleHDAZlib {false};
+
 #endif
 	
 	/**
@@ -325,7 +362,8 @@ private:
 			CodecsLoaded = 2,
 			CallbacksWantRouting = 4,
 			PatchHDAFamily = 8,
-			PatchHDAController = 16
+			PatchHDAController = 16,
+			PatchHDAPlatformDriver = 32
 		};
 	};
 	int progressState {ProcessingState::NotReady};

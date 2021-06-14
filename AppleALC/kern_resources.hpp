@@ -99,5 +99,6 @@ extern const size_t KextIdAppleHDAController;
 extern const size_t KextIdAppleHDA;
 extern const size_t KextIdAppleGFXHDA;
 extern const size_t KextIdIOHDAFamily;
+extern const size_t KextIdAppleHDAPlatformDriver;
 
 #endif /* kern_resource_hpp */
