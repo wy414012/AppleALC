@@ -42,9 +42,12 @@ void AlcEnabler::init() {
 #ifdef HAVE_ANALOG_AUDIO
 	if (getKernelVersion() < KernelVersion::Mojave)
 		ADDPR(kextList)[KextIdAppleGFXHDA].switchOff();
+	if (getKernelVersion() >= KernelVersion::Lion)
+		ADDPR(kextList)[KextIdAppleHDAPlatformDriver].switchOff();
 #else
 	ADDPR(kextList)[KextIdAppleGFXHDA].switchOff();
 	ADDPR(kextList)[KextIdAppleHDA].switchOff();
+	ADDPR(kextList)[KextIdAppleHDAPlatformDriver].switchOff();
 #endif
 
 	lilu.onKextLoadForce(ADDPR(kextList), ADDPR(kextListSize),
@@ -537,10 +540,14 @@ void AlcEnabler::processKext(KernelPatcher &patcher, size_t index, mach_vm_addre
 				KernelPatcher::RouteRequest("__ZN14AppleHDADriver20platformLoadCallbackEjiPKvjPv", platformLoadCallback, orgPlatformLoadCallback)
 			};
 			patcher.routeMultiple(index, requestsCallbacks, address, size);
+		} else {
+			patcher.clearError();
 		}
 		
 		// 10.6.8 to 10.7.5, and early versions of 10.8 do not use zlib compression for resources
 		isAppleHDAZlib = patcher.solveSymbol(index, "__Z24AppleHDA_zlib_uncompressPhPmPKhm") != 0;
+		if (!isAppleHDAZlib)
+			patcher.clearError();
 
 		// patch AppleHDA to remove redundant logs
 		if (!ADDPR(debugEnabled))
