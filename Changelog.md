@@ -1,5 +1,15 @@
 AppleALC Changelog
 ==================
+#### v1.6.5
+- Added ALC236 for Lenovo IdeaPad 330S-14IKB by Ab2774
+- Some updates and revisions for ALC236 LayoutID 36 by volcbs
+- Added ALC897 for GIGABYTE Z590 Gaming X by Sergey_Galan 
+- Added ALC294 layout-id 99 for ASUS ROG GU502LV by htmambo
+- Added ALC256 layout-id 99 for XiaoMiPro 2020 by htmambo
+- Added ALC897 Layout-id 23 for Chuwi-CoreBookX14 by weachy
+- Added ALC256 layout-id 20 for Asus AIO PC V222UAK-WA541T by andreszerocross
+- Added ALC236 layout-id 23 for Lenovo Air 13 IML(S530-13IML) by JudySL
+
 #### v1.6.4
 - Added 10.4 and 10.5 support, and 10.6 and 10.7 support in 32-bit mode
 - Update STAC9200 layout-id 11 to support 10.4 to 10.6
