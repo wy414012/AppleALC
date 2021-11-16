@@ -1,5 +1,8 @@
 AppleALC Changelog
 ==================
+#### v1.6.7
+- Added 600-series controller patch by @R-a-s-c-a-l
+
 #### v1.6.6
 - Added ALC256 layout-id 24 for Intel NUC NUC10i5FNH by Andres ZeroCross
 - Added Conexant CX11970 (CX8400) layout-id 13 for Acer Swift 3 SF31* (Ice Lake) by m0d16l14n1
