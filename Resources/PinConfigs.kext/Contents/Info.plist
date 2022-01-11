@@ -1372,7 +1372,7 @@
 					<key>LayoutID</key>
 					<integer>36</integer>
 					<key>WakeConfigData</key>
-					<data>AUcMAgIXDAI=</data>
+					<data>AUcMAgIXDAIBlwcl</data>
 					<key>WakeVerbReinit</key>
 					<true/>
 				</dict>
@@ -2895,6 +2895,24 @@
 					<integer>30</integer>
 					<key>WakeConfigData</key>
 					<data>AUcMAg==</data>
+					<key>WakeVerbReinit</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>AFGLowPowerState</key>
+					<data>AwAAAA==</data>
+					<key>CodecID</key>
+					<integer>283902569</integer>
+					<key>Comment</key>
+					<string>Custom ALC269-VC Samsung np540U4E by majonez</string>
+					<key>ConfigData</key>
+					<data>ASccEAEnHQABJx6mAScfkAG3HCABtx0AAbceFwG3H5ABVxwwAVcdEAFXHiEBVx8AAYccQAGHHZABhx6BAYcfAgG3DAIBVwwC</data>
+					<key>FuncGroup</key>
+					<integer>1</integer>
+					<key>LayoutID</key>
+					<integer>34</integer>
+					<key>WakeConfigData</key>
+					<data>AVcMAg==</data>
 					<key>WakeVerbReinit</key>
 					<true/>
 				</dict>
@@ -6600,7 +6618,7 @@
 					<key>Comment</key>
 					<string>ALC892 for ASRock B365 Pro4 By TheHackGuy</string>
 					<key>ConfigData</key>
-					<data>AUccEAFHHUABRx4BAUcfAQFHDAIBhxwgAYcdkAGHHqABhx+BAaccMAGnHTABpx6BAacfAQ==</data>
+					<data>AUccEAFHHUABRx4BAUcfAQFHDAIBhxwgAYcdkAGHHqABhx+BAaccMAGnHTABpx6BAacfAQGXHEABlx2QAZcegQGXHwIBtxxQAbcdQAG3HiEBtx8CAbcMAg==</data>
 					<key>FuncGroup</key>
 					<integer>1</integer>
 					<key>LayoutID</key>
@@ -7724,6 +7742,24 @@
 					<key>CodecID</key>
 					<integer>283906408</integer>
 					<key>CodecName</key>
+					<string>Realtek ALC S1220P_MSI_Z490i_UNIFY_ by_vio</string>
+					<key>ConfigData</key>
+					<data>AUccEAFHHVABRx4BAUcfAQFHDAIBVxwgAVcdEAFXHgEBVx8BAWccMAFnHRABZx4BAWcfAQGHHEABhx0QAYceoAGHH5EBlxxQAZcdkAGXHosBlx8CAaccYAGnHRABpx6BAacfAQG3HHABtx1AAbceIQG3HwIBtwwCAeccgAHnHREB5x5FAecfAQ==</data>
+					<key>FuncGroup</key>
+					<integer>1</integer>
+					<key>LayoutID</key>
+					<integer>8</integer>
+					<key>WakeConfigData</key>
+					<data>AUcMAg==</data>
+					<key>WakeVerbReinit</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>AFGLowPowerState</key>
+					<data>AwAAAA==</data>
+					<key>CodecID</key>
+					<integer>283906408</integer>
+					<key>CodecName</key>
 					<string>Realtek ALC S1220A Kushamot for Asus Z270G mb (based on Mirone's layout 7)</string>
 					<key>ConfigData</key>
 					<data>AUccEAFHHUABRx4RAUcfAQFXHFABVx0QAVceAQFXHwEBZxwwAWcdYAFnHgEBZx8BAYccYAGHHZABhx6gAYcfkAGXHHABlx2QAZcegQGXHwEBtxwgAbcdQAG3HiEBtx8BAUcMAg==</data>
@@ -7922,17 +7958,17 @@
 					<key>AFGLowPowerState</key>
 					<data>AwAAAA==</data>
 					<key>Codec</key>
-					<string>rdmitry0911 - Conexant CX8200 for LG Gram 17 17z990</string>
+					<string>Conexant CX8200 for LG Gram Z990/Z90N</string>
 					<key>CodecID</key>
 					<integer>351346696</integer>
 					<key>ConfigData</key>
-					<data>AXccEAF3HQEBdx4XAXcfkQF3DAIBpxwgAacdAQGnHqcBpx+VAZccMAGXHRABlx6BAZcfBAFnHEABZx0QAWceIQFnHwQBZwwC</data>
+					<data>AXccEAF3HQEBdx4XAXcfkQF3DAIBpxwgAacdAQGnHqABpx+VAZccMAGXHRABlx6LAZcfBAGXByQBZxxAAWcdEAFnHisBZx8EAWcMAg==</data>
 					<key>FuncGroup</key>
 					<integer>1</integer>
 					<key>LayoutID</key>
 					<integer>80</integer>
 					<key>WakeConfigData</key>
-					<data>AWcMAgF3DAI=</data>
+					<data>AWcMAgF3DAIBlwck</data>
 					<key>WakeVerbReinit</key>
 					<true/>
 				</dict>
@@ -9147,6 +9183,24 @@
 					<integer>1</integer>
 					<key>LayoutID</key>
 					<integer>12</integer>
+					<key>WakeConfigData</key>
+					<data>AUcMAgG3DAI=</data>
+					<key>WakeVerbReinit</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>AFGLowPowerState</key>
+					<data>AwAAAA==</data>
+					<key>Codec</key>
+					<string>Custom ALC897 by Sergey_Galan  for GIGABYTE Z590M</string>
+					<key>CodecID</key>
+					<integer>283904151</integer>
+					<key>ConfigData</key>
+					<data>AUccEAFHHUABRx4RAUcfAQFHDAIBVxzwAVcdAAFXHgABVx9AAWcc8AFnHQABZx4AAWcfQAF3HPABdx0AAXceAAF3H0ABhxxAAYcdkAGHHqABhx+QAZccYAGXHZABlx6BAZcfAgGnHFABpx0wAacegQGnHwEBtxxwAbcdQAG3HiEBtx8CAbcMAgEXHJABFx1hARceSwEXHwEB9xzwAfcdAAH3HgAB9x9AAecc8AHnHQAB5x4AAecfQA==</data>
+					<key>FuncGroup</key>
+					<integer>1</integer>
+					<key>LayoutID</key>
+					<integer>11</integer>
 					<key>WakeConfigData</key>
 					<data>AUcMAgG3DAI=</data>
 					<key>WakeVerbReinit</key>

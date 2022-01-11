@@ -2,6 +2,13 @@ AppleALC Changelog
 ==================
 #### v1.6.8
 - Replace patch for 500 Series(0x43C8) PCH HD Audio
+- Added ALC269-VC for Samsung NP540U4E #752 by @majonez
+- Added ALC1220A layout 8 for MSI z490i unify by @viorel78
+- Added front panel connections in ALC892 layout 23 for ASRock B365 Pro4 by @TheHackGuy
+- Removed redundant 8086:A171 controller patches by @al3xtjames
+- Fixed wakeconfigdata for ALC236 LayoutID 36 by @volcbs
+- Fixed Combo jack for CX8200 layout-id 80 by @vivzero
+- Added ALC897 layout 11 for GIGABYTE Z590M
 
 #### v1.6.7
 - Added 600-series controller patch by @R-a-s-c-a-l

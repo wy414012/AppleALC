@@ -270,6 +270,14 @@
 			</dict>
 			<dict>
 				<key>Comment</key>
+				<string>Custom ALC269-VC Samsung np540U4E by majonez</string>
+				<key>Id</key>
+				<integer>34</integer>
+				<key>Path</key>
+				<string>layout34.xml.zlib</string>
+			</dict>
+			<dict>
+				<key>Comment</key>
 				<string>Custom ALC269VC for Samsung NP350V5C-S0URU by Mirone</string>
 				<key>Id</key>
 				<integer>35</integer>
@@ -678,6 +686,14 @@
 				<integer>33</integer>
 				<key>Path</key>
 				<string>Platforms28.xml.zlib</string>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>Custom ALC269-VC Samsung np540U4E by majonez</string>
+				<key>Id</key>
+				<integer>34</integer>
+				<key>Path</key>
+				<string>Platforms34.xml.zlib</string>
 			</dict>
 			<dict>
 				<key>Comment</key>
