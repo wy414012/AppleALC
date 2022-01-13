@@ -1,5 +1,9 @@
 AppleALC Changelog
 ==================
+#### v1.6.9
+- Added 0x100003 revision for ALCS1220A
+- Updated pinconfig ALC897 layout-id 12 by @Sergey-Galan
+
 #### v1.6.8
 - Replace patch for 500 Series(0x43C8) PCH HD Audio
 - Added ALC269-VC for Samsung NP540U4E #752 by @majonez
