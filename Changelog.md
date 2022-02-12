@@ -4,7 +4,12 @@ AppleALC Changelog
 - Added 0x100003 revision for ALCS1220A
 - Updated pinconfig ALC897 layout-id 12 by @Sergey-Galan
 - Replace 200 Series PCH HD Audio 0xA2F0 controller patch
-- Update 0xA2F0 controller patch to fix HDMI audio by Core-i99
+- Update 0xA2F0 controller patch to fix HDMI audio by @Core-i99
+- Improved compatibility of `alc-verb` with Linux `hda-verb`
+- Reduce input gain for mics for layout 20 ALC230
+- Update Pin Config for layout 16 ALC1220
+- Added ALC294 layout-id 44 for ASUS UX534FAC by @narcyzzo
+- Added ALC1220A Layout 13 for Asus ProArt Z690-Creator WiFi by @CaseySJ
 
 #### v1.6.8
 - Replace patch for 500 Series(0x43C8) PCH HD Audio

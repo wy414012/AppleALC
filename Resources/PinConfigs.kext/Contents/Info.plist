@@ -4808,6 +4808,24 @@
 					<key>AFGLowPowerState</key>
 					<data>AwAAAA==</data>
 					<key>Codec</key>
+					<string>narcyzzo - Realtek ALC294 for ASUS UX534FAC</string>
+					<key>CodecID</key>
+					<integer>283902612</integer>
+					<key>ConfigData</key>
+					<data>ASccEAEnHQEBJx6gAScfkAF3HCABdx0BAXceEwF3H5ABdwwCAZccMAGXHRABlx6BAZcfBAIXHEACFx0QAhceIQIXHwQCFwwCAgUADwIEd3QCBQBFAgRSiQIFABACBAQgAgUAGwIETks=</data>
+					<key>FuncGroup</key>
+					<integer>1</integer>
+					<key>LayoutID</key>
+					<integer>44</integer>
+					<key>WakeConfigData</key>
+					<data>AXcMAgIXDAI=</data>
+					<key>WakeVerbReinit</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>AFGLowPowerState</key>
+					<data>AwAAAA==</data>
+					<key>Codec</key>
 					<string>KKKIIINNN - ALC294 ASUS X542UQR</string>
 					<key>CodecID</key>
 					<integer>283902612</integer>
@@ -7290,7 +7308,7 @@
 					<key>CodecName</key>
 					<string>MacPeet - ALC1220 for Gigabyte Z390</string>
 					<key>ConfigData</key>
-					<data>AeccMAHnHSAB5x5FAecfAQGHHEABhx2QAYceoQGHH5EBlxxQAZcdkAGXHoEBlx8CAUccYAFHHUABRx4hAUcfAgFHDAIBVxxwAVcdEAFXHgEBVx8BAWccgAFnHWABZx4BAWcfAQGnHJABpx0wAacegQGnHwEBtxygAbcdQAG3HhEBtx+RAbcMAg==</data>
+					<data>AeccMAHnHSAB5x5FAecfAQGHHEABhx2QAYceoQGHH5EBlxxQAZcdkAGXHoEBlx8CAUccYAFHHUABRx4hAUcfAgFHDAIBVxxwAVcdEAFXHgEBVx8BAWccgAFnHWABZx4BAWcfAQGnHJABpx0wAacegQGnHwEBtxygAbcdQAG3HhEBtx+RAbcMAgIFAAcCBAPAAgUAGgIEAcE=</data>
 					<key>FuncGroup</key>
 					<integer>1</integer>
 					<key>LayoutID</key>
@@ -7767,6 +7785,24 @@
 					<integer>1</integer>
 					<key>LayoutID</key>
 					<integer>11</integer>
+					<key>WakeConfigData</key>
+					<data>AUcMAg==</data>
+					<key>WakeVerbReinit</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>AFGLowPowerState</key>
+					<data>AwAAAA==</data>
+					<key>CodecID</key>
+					<integer>283906408</integer>
+					<key>CodecName</key>
+					<string>Realtek ALC S1220A for Asus ProArt Z690-Creator WiFi (CaseySJ)</string>
+					<key>ConfigData</key>
+					<data>AUccEAFHHUABRx4BAUcfAAFHDAIBVxwgAVcdEAFXHgEBVx8BAWccMAFnHWABZx4BAWcfAQGHHEABhx2QAYceoAGHH5ABlxxQAZcdkAGXHoEBhx8CAaccYAGnHTABpx6BAacfAQG3HHABtx1AAbceIQG3HwIBtwwC</data>
+					<key>FuncGroup</key>
+					<integer>1</integer>
+					<key>LayoutID</key>
+					<integer>13</integer>
 					<key>WakeConfigData</key>
 					<data>AUcMAg==</data>
 					<key>WakeVerbReinit</key>
