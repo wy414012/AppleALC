@@ -13,13 +13,13 @@ env:
 
 jobs:
   build:
-    name: xcode13.1构建
-    runs-on: macos-11
+    name: xcode-latest
+    runs-on: macos-latest
     env:
       JOB_TYPE: BUILD
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           repository: wy414012/MacKernelSDK
           path: MacKernelSDK
@@ -34,7 +34,7 @@ jobs:
       - run: xcodebuild -jobs 1 -configuration Release -arch ACID32 -arch x86_64
 
       - name: 打包上传工件
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: AppleAlc-build
           path: build/*/*.zip
@@ -46,5 +46,3 @@ jobs:
           file: build/*/*.zip
           tag: ${{ github.ref }}
           file_glob: true
-
- 
