@@ -2,6 +2,8 @@ AppleALC Changelog
 ==================
 #### v1.7.3
 - Added constants for macOS 13 support
+- Fix sleep breaking earphone support on ALC295 layout-id 13 by Mahas1
+- Fixed NUC8I5BEH JUST MIC ALC235 layout-id 88 by @frozenzero123
 
 #### v1.7.2
 - Added layout-id 97 ALC257 for Lenovo Thinkpad T490 by @savvamitrofanov
@@ -18,7 +20,7 @@ AppleALC Changelog
 - Fixed ALC298 layout-id 11 for Alienware 17 R4 2.1ch by @Rockjesus.cn
 - Fixed MSI MPG Z490 Gaming Plus Sound issue after booting from Windows by @JanoMorano
 - Added NUC8I5BEH JUST MIC layout-id 88 by @frozenzero123
-- Added layoutid 59 ALC292 for Dell M4800 with dockstation support by @hansyao
+- Added layout-id 59 ALC292 for Dell M4800 with dockstation support by @hansyao
 
 #### v1.7.0
 - Fix headphones after sleep on Latitude 7390 2-in-1 (ALC225 layout 30)
