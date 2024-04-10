@@ -32,6 +32,24 @@
 					<key>AFGLowPowerState</key>
 					<data>AwAAAA==</data>
 					<key>CodecID</key>
+					<integer>283904146</integer>
+					<key>Comment</key>
+					<string>KL X99 ALC892,7.1</string>
+					<key>ConfigData</key>
+					<data>AUccHwFHHUEBRx4RAUcfkQFHDAIBVxwvAVcdEAFXHgEBVx8BAWccPwFnHWABZx4BAWcfAQF3HE8Bdx0gAXceAQF3HwEBhxxQAYcdkQGHHqEBhx+RAZccYAGXHZABlx6hAZcfAgGnHHABpx0wAacegQGnHwEBtxyAAbcdQAG3HiEBtx8CAbcMAg==</data>
+					<key>FuncGroup</key>
+					<integer>1</integer>
+					<key>LayoutID</key>
+					<integer>6</integer>
+					<key>WakeConfigData</key>
+					<data>AUcMAgG3DAI=</data>
+					<key>WakeVerbReinit</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>AFGLowPowerState</key>
+					<data>AwAAAA==</data>
+					<key>CodecID</key>
 					<integer>283906408</integer>
 					<key>CodecName</key>
 					<string>Realtek ALC S1220A Hoangtu92, 7.1 outputs (MSI X470 Gaming Pro Carbon)</string>
@@ -4702,7 +4720,7 @@
 					<key>WakeVerbReinit</key>
 					<true/>
 				</dict>
-        <dict>
+				<dict>
 					<key>AFGLowPowerState</key>
 					<data>AwAAAA==</data>
 					<key>Codec</key>
