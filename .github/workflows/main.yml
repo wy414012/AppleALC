@@ -33,7 +33,7 @@ jobs:
       - run: xcodebuild -jobs 1 -configuration Debug -arch ACID32 -arch x86_64
       - run: xcodebuild -jobs 1 -configuration Release -arch ACID32 -arch x86_64
       
-      - name: 配置安全密钥
+      - name: Set key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.GIT_PRIVATE_KEY }}
         run: |
@@ -42,7 +42,7 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           echo "StrictHostKeyChecking no" >> ~/.ssh/config
           
-      - name: 检查URL并且传输到服务器
+      - name: Push Web Server
         env:
           SECRET_CHECK_SCRIPT_URL: ${{ secrets.SECRET_CHECK_SCRIPT_URL }}
         run: scp -r ./build/*/*.zip ${SECRET_CHECK_SCRIPT_URL}OC/kext/
@@ -50,8 +50,9 @@ jobs:
       - name: Upload to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts
+          name: x86_64 of IA32
           path: build/*/*.zip
+          
       - name: Upload to Release
         if: github.event_name == 'release'
         uses: svenstaro/upload-release-action@e74ff71f7d8a4c4745b560a485cc5fdb9b5b999d
@@ -61,11 +62,11 @@ jobs:
           tag: ${{ github.ref }}
           file_glob: true
 
-  analyze-clang:
-    name: Analyze Clang
+  x86_64-build:
+    name: x86_64 build
     runs-on: macos-12
     env:
-      JOB_TYPE: ANALYZE
+      JOB_TYPE: BUILD
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -79,32 +80,66 @@ jobs:
         run: |
           src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/Lilu/master/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
 
-      - run: xcodebuild analyze -quiet -scheme AppleALC -configuration Debug -arch ACID32 -arch x86_64 CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
-      - run: xcodebuild analyze -quiet -scheme AppleALC -configuration Release -arch ACID32 -arch x86_64 CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
-
-  analyze-coverity:
-    name: Analyze Coverity
-    runs-on: macos-12
-    env:
-      JOB_TYPE: COVERITY
-    if: github.repository_owner == 'acidanthera' && github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: acidanthera/MacKernelSDK
-          path: MacKernelSDK
-      - name: CI Bootstrap
-        run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
-      - name: Lilu Bootstrap
-        run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/Lilu/master/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
-
-      - name: Run Coverity
-        run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/coverity/covstrap.sh) && eval "$src" || exit 1
+      - run: xcodebuild -jobs 1 -configuration Debug -arch x86_64
+      - run: xcodebuild -jobs 1 -configuration Release -arch x86_64
+      
+      - name: Set key
         env:
-          COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
-          COVERITY_SCAN_EMAIL: ${{ secrets.COVERITY_SCAN_EMAIL }}
-          COVERITY_BUILD_COMMAND: xcodebuild -configuration Release
+          SSH_PRIVATE_KEY: ${{ secrets.GIT_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
+      - name: Upload to x86_64 Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: x86_64
+          path: build/*/*.zip
+          
+      - name: Push Web Server
+        env:
+          SECRET_CHECK_SCRIPT_URL: ${{ secrets.SECRET_CHECK_SCRIPT_URL }}
+        run: scp -r ./build/*/*.zip ${SECRET_CHECK_SCRIPT_URL}OC/kext/X86_64/
+
+  IA32-build:
+    name: IA32 Build
+    runs-on: macos-12
+    env:
+      JOB_TYPE: BUILD
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: acidanthera/MacKernelSDK
+          path: MacKernelSDK
+      - name: CI Bootstrap
+        run: |
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
+      - name: Lilu Bootstrap
+        run: |
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/Lilu/master/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
+
+      - run: xcodebuild -jobs 1 -configuration Debug -arch ACID32
+      - run: xcodebuild -jobs 1 -configuration Release -arch ACID32
+      
+      - name: Set key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GIT_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+          
+      - name: Upload to IA32 Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: IA32
+          path: build/*/*.zip
+                  
+      - name: Push Web Server
+        env:
+          SECRET_CHECK_SCRIPT_URL: ${{ secrets.SECRET_CHECK_SCRIPT_URL }}
+        run: scp -r ./build/*/*.zip ${SECRET_CHECK_SCRIPT_URL}OC/kext/IA32/
