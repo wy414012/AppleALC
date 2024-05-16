@@ -8,13 +8,13 @@ on:
     types: [published]
 
 env:
-  PROJECT_TYPE: KEXT
+  PROJECT_TYPE: OC-D
   ACID32: 1
 
 jobs:
   build:
     name: Build
-    runs-on: macos-12
+    runs-on: self-hosted
     env:
       JOB_TYPE: BUILD
     steps:
@@ -25,10 +25,10 @@ jobs:
           path: MacKernelSDK
       - name: CI Bootstrap
         run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/wy414012/ocbuild/Yaming/ci-bootstrap.sh) && eval "$src" || exit 1
       - name: Lilu Bootstrap
         run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/Lilu/master/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/wy414012/Lilu/yaming-network/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
 
       - run: xcodebuild -jobs 1 -configuration Debug -arch ACID32 -arch x86_64
       - run: xcodebuild -jobs 1 -configuration Release -arch ACID32 -arch x86_64
@@ -64,7 +64,7 @@ jobs:
 
   x86_64-build:
     name: x86_64 build
-    runs-on: macos-12
+    runs-on: self-hosted
     env:
       JOB_TYPE: BUILD
     steps:
@@ -75,10 +75,10 @@ jobs:
           path: MacKernelSDK
       - name: CI Bootstrap
         run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/wy414012/ocbuild/Yaming/ci-bootstrap.sh) && eval "$src" || exit 1
       - name: Lilu Bootstrap
         run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/Lilu/master/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/wy414012/Lilu/yaming-network/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
 
       - run: xcodebuild -jobs 1 -configuration Debug -arch x86_64
       - run: xcodebuild -jobs 1 -configuration Release -arch x86_64
@@ -105,7 +105,7 @@ jobs:
 
   IA32-build:
     name: IA32 Build
-    runs-on: macos-12
+    runs-on: self-hosted
     env:
       JOB_TYPE: BUILD
     steps:
@@ -116,10 +116,10 @@ jobs:
           path: MacKernelSDK
       - name: CI Bootstrap
         run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/ci-bootstrap.sh) && eval "$src" || exit 1
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/wy414012/ocbuild/Yaming/ci-bootstrap.sh) && eval "$src" || exit 1
       - name: Lilu Bootstrap
         run: |
-          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/Lilu/master/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
+          src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/wy414012/Lilu/yaming-network/Lilu/Scripts/bootstrap.sh) && eval "$src" || exit 1
 
       - run: xcodebuild -jobs 1 -configuration Debug -arch ACID32
       - run: xcodebuild -jobs 1 -configuration Release -arch ACID32
