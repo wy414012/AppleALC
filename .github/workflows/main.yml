@@ -8,13 +8,13 @@ on:
     types: [published]
 
 env:
-  PROJECT_TYPE: OC-D
+  PROJECT_TYPE: KEXT
   ACID32: 1
 
 jobs:
   build:
     name: Build
-    runs-on: self-hosted
+    runs-on: macos-latest
     env:
       JOB_TYPE: BUILD
     steps:
@@ -64,7 +64,7 @@ jobs:
 
   x86_64-build:
     name: x86_64 build
-    runs-on: self-hosted
+    runs-on: macos-latest
     env:
       JOB_TYPE: BUILD
     steps:
