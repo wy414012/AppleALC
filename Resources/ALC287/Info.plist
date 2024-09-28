@@ -26,7 +26,7 @@
 				<key>Path</key>
 				<string>layout21.xml.zlib</string>
 			</dict>
-      <dict>
+			<dict>
 				<key>Comment</key>
 				<string>ALC287 for Legion 5 Pro(R9000p)</string>
 				<key>Id</key>
@@ -51,7 +51,7 @@
 				<key>Path</key>
 				<string>Platforms21.xml.zlib</string>
 			</dict>
-      <dict>
+			<dict>
 				<key>Comment</key>
 				<string>ALC287 for Legion 5 Pro(R9000p)</string>
 				<key>Id</key>
