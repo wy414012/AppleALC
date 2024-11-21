@@ -1,5 +1,8 @@
 AppleALC Changelog
 ==================
+#### v1.9.3
+- Fix AMD HDA Controllers on macOS Sequoia by @Zormeister
+
 #### v1.9.2
 - Fixed 700 series HDA controller patch as found on Z790 motherboards and alike by savvas
 - Added ALCS1200A layout-id 12 for ASUS-TUF-Z390M-Gaming by mobilestebu
