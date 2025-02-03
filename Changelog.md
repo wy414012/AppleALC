@@ -2,6 +2,8 @@ AppleALC Changelog
 ==================
 #### v1.9.3
 - Fix AMD HDA Controllers on macOS Sequoia by @Zormeister
+- Added ALC892 layout-id 66 for MSI GE60 2OC/2OE/2OD by tsanie
+- Added ALC294 layout-id 24 for Asus ROG Strix G512li by theroadw
 
 #### v1.9.2
 - Fixed 700 series HDA controller patch as found on Z790 motherboards and alike by savvas
