@@ -1,5 +1,8 @@
 AppleALC Changelog
 ==================
+#### v1.9.5
+- Added constants for macOS 26 support
+
 #### v1.9.4
 - Added ALC298 layout-id 17 for SAMSUNG NT950SBE by SkyFever
 - Updated PinConfig ALC897 layout-id 11 by narcyzzo
