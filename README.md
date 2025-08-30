@@ -16,7 +16,9 @@ English (Current)
 - Arbitrary kext patching
 - Custom platform/layout injection
 - Works with SIP / El Capitan+
-- Currently compatible with 10.4-26
+- Currently compatible with 10.4-26*
+
+\* _NOTE_: macOS 26 dropped AppleHDA.kext in DP2. AppleALC functioning on macOS 26 may require additional actions if AppleHDA.kext is necessary.
 
 #### Credits
 - [Apple](https://www.apple.com) for macOS  
